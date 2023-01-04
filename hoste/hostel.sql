@@ -11,47 +11,67 @@ INSERT INTO room_type(name, price)
 VALUES
     ('Одноместный', 500.0),
     ('Двухместный', 975.0),
-    ('Четырёхместный', 1800.0),
-    ('Полу-Вип', 3962.0),
-    ('Вип', 5000.0);
+    ('Семейный', 1800.0),
+    ('Вип', 3962.0),
+    ('Бизнес', 6000.0);
 
+
+-- Таблица: ОПИСАНИЕ_НОМЕРА
+DROP TABLE IF EXISTS room_description;
+
+CREATE TABLE IF NOT EXISTS room_description(
+    description_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    description VARCHAR(45) NOT NULL,
+    detailed_description VARCHAR(90) NOT NULL
+);
+-- Заполнение: ОПИСАНИЕ_НОМЕРА
+INSERT INTO room_description(description, detailed_description)
+VALUES
+    ('С видом на море',
+        '''Из этой комнаты открывается прекрасный вид на морские пейзажи.'''),
+    ('С видом на город',
+        '''Из окон комнаты открывается удивительный вид на городской ландшафт.'''),
+    ('С видом на лес',
+        '''Если у вас есть желание отдохнуть от городской суеты, то данная комната отлично вам подходит.''');
 
 -- Таблица: КОМНАТА
 DROP TABLE IF EXISTS room;
 
 CREATE TABLE IF NOT EXISTS room(
     room_id INTEGER PRIMARY KEY,
-    type_id INT NOT NULL,
-    FOREIGN KEY (type_id) REFERENCES room_type (type_id) ON DELETE RESTRICT ON UPDATE CASCADE
+    type_id INTEGER NOT NULL,
+    description_id  INTEGER NOT NULL,
+    FOREIGN KEY (type_id) REFERENCES room_type (type_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (description_id) REFERENCES room_description (description_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 -- Заполнение: КОМНАТА
-INSERT INTO room(room_id, type_id)
+INSERT INTO room(room_id, type_id, description_id)
 VALUES
-     (101, 1),
-     (102, 1),
-     (103, 1),
-     (104, 1),
-     (105, 1),
-     (106, 2),
-     (107, 2),
-     (108, 2),
-     (109, 2),
-     (110, 2),
-     (201, 3),
-     (202, 3),
-     (203, 3),
-     (204, 3),
-     (205, 3),
-     (206, 3),
-     (207, 3),
-     (208, 3),
-     (209, 3),
-     (210, 3),
-     (301, 4),
-     (302, 4),
-     (303, 4),
-     (304, 5),
-     (305, 5);
+     (101, 1, 1),
+     (102, 1, 1),
+     (103, 1, 2),
+     (104, 1, 3),
+     (105, 1, 3),
+     (106, 2, 1),
+     (107, 2, 2),
+     (108, 2, 2),
+     (109, 2, 2),
+     (110, 2, 3),
+     (201, 3, 1),
+     (202, 3, 1),
+     (203, 3, 1),
+     (204, 3, 1),
+     (205, 3, 2),
+     (206, 3, 2),
+     (207, 3, 3),
+     (208, 3, 3),
+     (209, 3, 3),
+     (210, 3, 3),
+     (301, 4, 1),
+     (302, 4, 2),
+     (303, 4, 3),
+     (304, 5, 1),
+     (305, 5, 2);
 
 
 -- Таблица: КЛИЕНТ
@@ -70,7 +90,7 @@ VALUES
     ('Иванов Ф.П.', '1010181902', '8-999-251-18-02'),
     ('Абрамов В.С.', '1010202003', '8-999-251-18-03'),
     ('Сергеева В.К.', '1010373304', '8-999-251-18-04'),
-    ('Кандратьев А.Д.', '1010111105', '8-999-251-18-05'),
+    ('Кондратьев А.Д.', '1010111105', '8-999-251-18-05'),
     ('Селезнёв Э.Т.', '1011363304', '8-800-555-35-35'),
     ('Румянцев Д.В.', '1021567899', '8-999-251-18-06'),
     ('Хлебников Р.И.', '1307157842', '8-999-251-18-07'),
@@ -95,7 +115,7 @@ CREATE TABLE IF NOT EXISTS status_room(
 INSERT INTO status_room(name)
 VALUES
     ('забронирована'),
-    ('отмененена');
+    ('отменена');
 
 
 -- Таблица: БРОНИРОВАНИЕ
@@ -107,7 +127,7 @@ CREATE TABLE IF NOT EXISTS booking(
     client_id INT NOT NULL,
     status_id INT NOT NULL,
     date_check_in DATE NOT NULL,
-    date_check_out DATE NULL,
+    date_check_out DATE NOT NULL,
     FOREIGN KEY (room_id) REFERENCES room (room_id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (client_id) REFERENCES client (client_id) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (status_id) REFERENCES status_room (status_id) ON DELETE RESTRICT ON UPDATE CASCADE
@@ -119,10 +139,10 @@ VALUES
     (102, 1, 1, '2022-10-01', '2022-10-21'),
     (103, 2, 1, '2022-10-04', '2022-10-15'),
     (104, 3, 1, '2022-10-01', '2022-10-04'),
-    (105, 10, 1, '2022-10-01', ''),
+    (105, 10, 1, '2022-10-01', '2022-10-03'),
     (107, 9, 2, '2022-10-12', '2022-10-21'),
     (109, 9, 1, '2022-10-10', '2022-10-18'),
-    (101, 8, 1, '2022-10-18', '2022-11-30'),
+    (101, 8, 1, '2022-10-18', '2022-11-09'),
     (301, 7, 1, '2022-10-01', '2022-10-05'),
     (305, 6, 1, '2022-10-01', '2022-10-05'),
     (106, 4, 1, '2022-09-30', '2022-10-07'),
@@ -161,10 +181,10 @@ INSERT INTO service(name, price)
 VALUES
     ('Завтрак в постель', 200.50),
     ('Уборка в комнате', 350.0),
-    ('Экскурсия_1', 400.35),
-    ('Экскурсия_2', 578.98),
-    ('Экскурсия_3', 750.0),
-    ('Шветский стол', 650.0),
+    ('Экскурсия 1', 400.35),
+    ('Экскурсия 2', 578.98),
+    ('Экскурсия 3', 750.0),
+    ('Шведский стол', 650.0),
     ('Мороженое', 100.0);
 
 
@@ -179,31 +199,29 @@ CREATE TABLE IF NOT EXISTS costumer_services (
     FOREIGN KEY (service_id) REFERENCES service (service_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 -- Заполнение УСЛУГА_ДЛЯ_КЛИЕНТА
-INSERT INTO costumer_services(service_id, booking_id)
+INSERT INTO costumer_services(booking_id, service_id)
 VALUES
+    (1, 4),
+    (2, 5),
+    (5, 1),
+    (5, 2),
+    (5, 3),
+    (5, 4),
+    (5, 5),
+    (5, 6),
+    (5, 7),
     (9, 1),
     (9, 6),
     (9, 7),
     (10, 1),
     (10, 6),
     (10, 7),
-    (1, 4),
-    (2, 5),
-    (5, 1),
-    (5, 3),
-    (5, 1),
-    (5, 7),
-    (5, 1),
-    (5, 2),
-    (5, 1),
-    (5, 4),
-    (5, 5),
     (10, 6),
     (10, 7),
     (26, 1),
-    (26, 3),
     (26, 2),
+    (26, 3),
     (26, 4),
-    (26, 1),
     (26, 5),
+    (26, 6),
     (26, 7);
