@@ -123,9 +123,9 @@ DROP TABLE IF EXISTS booking;
 
 CREATE TABLE IF NOT EXISTS booking(
     booking_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    room_id INT NOT NULL,
-    client_id INT NOT NULL,
-    status_id INT NOT NULL,
+    room_id INTEGER NOT NULL,
+    client_id INTEGER NOT NULL,
+    status_id INTEGER NOT NULL,
     date_check_in DATE NOT NULL,
     date_check_out DATE NOT NULL,
     FOREIGN KEY (room_id) REFERENCES room (room_id) ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -193,8 +193,8 @@ DROP TABLE IF EXISTS costumer_services;
 
 CREATE TABLE IF NOT EXISTS costumer_services (
     costumer_services_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    booking_id INT NOT NULL,
-    service_id INT NOT NULL,
+    booking_id INTEGER NOT NULL,
+    service_id INTEGER NOT NULL,
     FOREIGN KEY (booking_id) REFERENCES booking (booking_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (service_id) REFERENCES service (service_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
