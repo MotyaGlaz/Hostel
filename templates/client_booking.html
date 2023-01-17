@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title> Мои бронирования </title>
+        <link rel="stylesheet" href="/static/css/style.css">
+        {% import "macros.html" as macros %}
+    </head>
+    <body>
+        <header id="header" class="header lock-padding">
+            {{ macros.render_booking_header(df_client, client_id, len, int) }}
+        </header>
+        <div class="content">
+            <div class="mainContainer">
+                {{ macros.render_booking_client(df_booking, len) }}
+                {{ macros.render_modal_window_booking(df_booking, df_booking_services, df_service, service_list, len, str, int) }}
+            </div>
+        </div>
+    </body>
+
+    <script>
+        // работа с изменением цены
+        modal_windows = document.querySelectorAll('.modalWindow');
+        let n = modal_windows.length;
+        let services = [];
+        let price_service = {1:205, 2:350, 3:400, 4:580, 5:750, 6:650, 7:100}
+        for(var i=0; i<n; i++){
+            services.push( [] );
+        }
+        for(let i=0; i < n; i++){
+            let full_price = modal_windows[i].querySelector(`#full_price_${i}`);
+            for(var j=0; j < 7; j++){
+                services[i].push(modal_windows[i].querySelector(`#service_${i}_${j}`));
+            }
+            for(var j=0; j<7; j++){
+                if (services[i][j].checked){
+                    full_price.textContent = Number(full_price.textContent) + price_service[j+1]
+                }
+            }
+            for(let j=0; j<7; j++){
+                services[i][j].addEventListener("change", function (){
+                    if (this.checked){
+                        full_price.textContent = Number(full_price.textContent) + price_service[j+1]
+                        console.log(full_price.textContent)
+                    }
+                    else{
+                        full_price.textContent = Number(full_price.textContent) - price_service[j+1]
+                        console.log(full_price.textContent)
+                    }
+                })
+            }
+        }
+    </script>
+</html>

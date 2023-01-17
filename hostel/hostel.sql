@@ -3,17 +3,17 @@ DROP TABLE IF EXISTS room_type;
 
 CREATE TABLE IF NOT EXISTS room_type(
     type_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR(45) NOT NULL,
-    price DECIMAL NOT NULL
+    type_name VARCHAR(45) NOT NULL,
+    price INTEGER NOT NULL
 );
 -- Заполнение: ТИП_КОМНАТЫ
-INSERT INTO room_type(name, price)
+INSERT INTO room_type(type_name, price)
 VALUES
-    ('Одноместный', 500.0),
-    ('Двухместный', 975.0),
-    ('Семейный', 1800.0),
-    ('Вип', 3962.0),
-    ('Бизнес', 6000.0);
+    ('Одноместный', 500),
+    ('Двухместный', 975),
+    ('Семейный', 1800),
+    ('Вип', 3962),
+    ('Бизнес', 6000);
 
 
 -- Таблица: ОПИСАНИЕ_НОМЕРА
@@ -28,11 +28,11 @@ CREATE TABLE IF NOT EXISTS room_description(
 INSERT INTO room_description(description, detailed_description)
 VALUES
     ('С видом на море',
-        '''Из этой комнаты открывается прекрасный вид на морские пейзажи.'''),
+        'Из этой комнаты открывается прекрасный вид на морские пейзажи.'),
     ('С видом на город',
-        '''Из окон комнаты открывается удивительный вид на городской ландшафт.'''),
+        'Из окон комнаты открывается удивительный вид на городской ландшафт.'),
     ('С видом на лес',
-        '''Если у вас есть желание отдохнуть от городской суеты, то данная комната отлично вам подходит.''');
+        'Если у вас есть желание отдохнуть от городской суеты, то данная комната отлично вам подходит.');
 
 -- Таблица: КОМНАТА
 DROP TABLE IF EXISTS room;
@@ -79,12 +79,12 @@ DROP TABLE IF EXISTS client;
 
 CREATE TABLE IF NOT EXISTS client(
     client_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR(45) NOT NULL,
+    client_name VARCHAR(45) NOT NULL,
     passport VARCHAR(10) NOT NULL UNIQUE,
     phone VARCHAR(15) NOT NULL UNIQUE
 );
 -- Заполнение: КЛИЕНТ
-INSERT INTO client(name, passport, phone)
+INSERT INTO client(client_name, passport, phone)
 VALUES
     ('Петров И.В.', '1010234501', '8-999-251-18-01'),
     ('Иванов Ф.П.', '1010181902', '8-999-251-18-02'),
@@ -109,10 +109,10 @@ DROP TABLE IF EXISTS status_room;
 
 CREATE TABLE IF NOT EXISTS status_room(
     status_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR(20) NOT NULL
+    status_name VARCHAR(20) NOT NULL
 );
 -- Заполнение: СТАТУС_КОМНАТЫ
-INSERT INTO status_room(name)
+INSERT INTO status_room(status_name)
 VALUES
     ('забронирована'),
     ('отменена');
@@ -173,19 +173,19 @@ DROP TABLE IF EXISTS service;
 
 CREATE TABLE IF NOT EXISTS service (
     service_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR(45) NOT NULL,
-    price DECIMAL NOT NULL
+    service_name VARCHAR(45) NOT NULL,
+    price INTEGER NOT NULL
 );
 -- Заполнение: УСЛУГА
-INSERT INTO service(name, price)
+INSERT INTO service(service_name, price)
 VALUES
-    ('Завтрак в постель', 200.50),
-    ('Уборка в комнате', 350.0),
-    ('Экскурсия 1', 400.35),
-    ('Экскурсия 2', 578.98),
-    ('Экскурсия 3', 750.0),
-    ('Шведский стол', 650.0),
-    ('Мороженое', 100.0);
+    ('Завтрак в постель', 205),
+    ('Уборка в комнате', 350),
+    ('Экскурсия 1', 400),
+    ('Экскурсия 2', 580),
+    ('Экскурсия 3', 750),
+    ('Шведский стол', 650),
+    ('Мороженое', 100);
 
 
 -- Таблица: УСЛУГА_ДЛЯ_КЛИЕНТА
@@ -214,9 +214,9 @@ VALUES
     (9, 6),
     (9, 7),
     (10, 1),
-    (10, 6),
-    (10, 7),
-    (10, 6),
+    (10, 2),
+    (10, 3),
+    (10, 5),
     (10, 7),
     (26, 1),
     (26, 2),

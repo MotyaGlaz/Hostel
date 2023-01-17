@@ -1,10 +1,96 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title> Выбор номера </title>
-    </head>
-    <body>
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title> Выбор номера </title>
+    {% import "macros.html" as macros%}
+</head>
+<body>
+    <div class="wrapper">
 
-    </body>
+        <header id="header" class="header lock-padding">
+            {{ macros.render_index_header(df_client, client_id, "select_client", len, int) }}
+        </header>
+
+        <div class="content">
+            <div class="mainIndexContainer">
+                <div class="settingsContainer">
+                    <form action='' method="get">
+                        <div class="calenderContainer">
+                            <div class="calenderContent">
+                                <b>Дата заезда:</b>
+                                <label>
+                                    <input id="date_check_in" class="calender" type="date" name="date_check_in" required
+                                           value="{{ check_in }}" min="{{ current_day }}">
+                                </label>
+                            </div>
+                            <div class="calenderContent">
+                                <b>Дата выезда:</b>
+                                <label>
+                                    <input id="date_check_out" class="calender" type="date" name="date_check_out" required
+                                           value="{{ check_out }}" min="{{ min_date }}">
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="checkboxContainer">
+                            {{ macros.render_check_box(df_type_room, room_type_list, 'select_types', 'Тип комнаты', len, str) }}
+                        </div>
+                        <div class="checkboxContainer">
+                            {{ macros.render_check_box(df_description_room, room_description_list, 'select_descriptions',
+                            'Вид из окна', len, str) }}
+                        </div>
+                        <div class="buttonFindContainer">
+                            <input type="submit" value="Отправить" name="find_room" class="buttonFind">
+                        </div>
+                    </form>
+                </div>
+
+                <div class="availableRoom">
+                    {{ macros.render_available_type(df_available_type, len)}}
+                </div>
+                {{ macros.render_modal_window(df_available_type, df_service, df_client, service_list, 'select_service', client_id, len, str) }}
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    // работа с датой
+    date_check_in = document.getElementById('date_check_in');
+    date_check_in.addEventListener("blur", function (){
+        var date_check_out = document.getElementById('date_check_out');
+        date_check_out.min = date_check_in.value;
+        if (date_check_out.value < date_check_in.value) {
+            date_check_out.value = date_check_in.value;
+        }
+    })
+
+    // работа с изменением цены
+    modal_windows = document.querySelectorAll('.modalWindow');
+    let n = modal_windows.length;
+    let services = [];
+    let price_service = {1:205, 2:350, 3:400, 4:580, 5:750, 6:650, 7:100}
+    for(var i=0; i<n; i++){
+        services.push( [] );
+    }
+    for(let i=0; i < n; i++){
+        let full_price = modal_windows[i].querySelector(`#full_price_${i}`);
+        for(var j=0; j < 7; j++){
+            services[i].push(modal_windows[i].querySelector(`#service_${i}_${j}`));
+        }
+        for(let j=0; j<7; j++){
+            services[i][j].addEventListener("change", function (){
+                if (this.checked){
+                    full_price.textContent = Number(full_price.textContent) + price_service[j+1]
+                    console.log(full_price.textContent)
+                }
+                else{
+                    full_price.textContent = Number(full_price.textContent) - price_service[j+1]
+                    console.log(full_price.textContent)
+                }
+            })
+        }
+    }
+</script>
 </html>

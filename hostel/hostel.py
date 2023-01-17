@@ -22,23 +22,23 @@ def queryRoomInformation():
     data_frame = pd.read_sql('''
         SELECT 
             room_id AS Комната, 
-            name AS Тип, 
+            type_name AS Тип, 
             price AS Цена
         FROM room
             INNER JOIN room_type USING (type_id)
         WHERE price < :m_price
-        ORDER BY name
+        ORDER BY type_name
     ''', con, params={"m_price": max_price})
 
     print(data_frame)
 
 
-# Запрос: вывести активных проживающих (с инф-ей о бронировании) на сегоднящний день
+# Запрос: вывести активных проживающих (с инф-ей о бронировании) на сегодняшний день
 # Сортировка по имени клиента
 def queryCurrentResident():
     data_frame = pd.read_sql('''
         SELECT 
-            name AS Клиент, 
+            client_name AS Клиент, 
             room_id AS Комната, 
             date_check_in AS Заселение, 
             date_check_out AS Выселение
@@ -47,19 +47,19 @@ def queryCurrentResident():
         WHERE status_id = 1 AND
             ((date('now') >= date_check_in AND date('now') <= date_check_out)
                 OR date_check_out IS NULL)
-        ORDER BY name
+        ORDER BY client_name
     ''', con)
 
     print(data_frame)
 
 
-# Запрос: вывести список свободных намеров (комната и её тип) на промежуток времени (даты)
+# Запрос: вывести список свободных номеров (комната и её тип) на промежуток времени (даты)
 def queryFreeRooms():
     check_in = '2022-10-22'# input('Введите дату начала бронирования (пример 2000-01-01): ')
     check_out = '2022-10-31'# input('Введите дату конца бронирования: ')
 
     data_frame = pd.read_sql('''
-        SELECT room_id, name
+        SELECT room_id, type_name
         FROM room
             INNER JOIN room_type USING (type_id)
         WHERE room_id NOT IN (SELECT room_id
@@ -76,7 +76,7 @@ def queryFreeRooms():
 # Запрос: Вывести свободные комнаты (номер и тип) на сегодняшний день
 def queryFreeRoomsNow():
     data_frame = pd.read_sql('''
-     SELECT room_id, name
+     SELECT room_id, type_name
         FROM room
             INNER JOIN room_type USING (type_id)
         WHERE room_id NOT IN (SELECT room_id
@@ -107,7 +107,7 @@ def queryCustomerAccount():
             INNER JOIN client USING (client_id)
             WHERE status_id = 1 AND date('now') > date_check_in
             AND (date('now') <= date_check_out OR date_check_out IS NULL)
-            AND client.name = :cust
+            AND client.client_name = :cust
             GROUP BY booking_id
     ''', con, params={"cust": customer})
 
@@ -119,7 +119,7 @@ def queryCustomerAccount():
 def queryFullPrice():
     data_frame = pd.read_sql('''
         SELECT
-            name AS Тип,
+            type_name AS Тип,
             (price +
                 ROUND((SELECT SUM(price) FROM service)*0.75, 2)
             ) AS Цена
@@ -129,12 +129,12 @@ def queryFullPrice():
     print(data_frame)
 
 
-# Запрос: рассчёт прибыли отеля с учётом занятости всех комнат за 1 день
+# Запрос: расчёт прибыли отеля с учётом занятости всех комнат за 1 день
 # Вывести тип и прибыль
 def queryFullProfit():
     data_frame = pd.read_sql('''
         SELECT
-            name,
+            type_name,
             (price*(SELECT COUNT(room_id) FROM room GROUP BY type_id)) AS price
         FROM room_type
     ''', con)
@@ -162,7 +162,7 @@ def queryChangeServicePrice():
     con.execute('''
         UPDATE service
         SET price = price*0.9 -- нужно /0.9
-        WHERE name = :n_service
+        WHERE service_name = :n_service
     ''', {"n_service": name_service})
 
     con.commit()
