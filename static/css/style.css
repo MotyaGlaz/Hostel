@@ -111,15 +111,15 @@ nav a {
     padding: 100px 0 0 0;
 }
 
-.mainContainer{
+.bookingContainer{
     margin: 0 auto;
     padding: 0 15px;
     max-width: 1070px;
 
 }
-.mainIndexContainer{
+.mainContainer{
     padding: 0 15px;
-    max-width: 1070px;
+    /*max-width: 1070px;*/
     display: flex;
     justify-content: center;
 }
@@ -159,15 +159,16 @@ nav a {
 
 .checkboxLabel{
     margin: 3% 0;
+    width: max-content;
 }
 
-.buttonFindContainer{
+.buttonFindContainer, .buttonSortingContainer{
     display: flex;
     justify-content: center;
     margin: 5% 0 0 0;
 }
 
-.buttonFind{
+.buttonFind, .buttonSorting{
     background-color: #dadaf6;
     border: 2px solid #c6c6ef;
     color: #6d6d72;
@@ -261,4 +262,5 @@ nav a {
 .bookingClient{
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }

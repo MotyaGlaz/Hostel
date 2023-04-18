@@ -1,8 +1,25 @@
 import pandas as pd
 
+def get_type_room(conn):
+    return pd.read_sql('''
+        SELECT
+            type_id,
+            type_name
+        FROM room_type
+    ''',conn)
 
-def get_booking_client(conn, client_id, current_day):
-    booking = pd.read_sql('''
+
+def get_description_room(conn):
+    return pd.read_sql('''
+        SELECT
+            description_id,
+            description
+        FROM room_description
+    ''', conn)
+
+
+def get_booking_client(conn, client_id, current_day, status_list, type_list, description_list):
+    booking = pd.read_sql(f'''
         SELECT
             booking_id, 
             
@@ -27,7 +44,10 @@ def get_booking_client(conn, client_id, current_day):
             INNER JOIN room USING (room_id)
             INNER JOIN room_description USING (description_id)
             INNER JOIN room_type USING (type_id)
-        WHERE client_id = :c_id
+        WHERE client_id = :c_id AND 
+            (status IN ({str(status_list).strip('[]')}) 
+                OR type_id IN ({str(type_list).strip('[]')})
+                OR description_id IN ({str(description_list).strip('[]')}))
     ''', conn, params={"c_id": client_id, "c_day": current_day})
 
     booking_id_list = [int(b_id) for b_id in booking['booking_id']]
@@ -45,10 +65,10 @@ def get_booking_client(conn, client_id, current_day):
                 INNER JOIN service USING (service_id)
             WHERE booking_id = :b_id
         ''', conn, params={"b_id": b_id})
-        list = []
+        temp_list = []
         for i in range(len(services[b_id])):
-            list.append(services[b_id]['service_id'].iloc[i])
-        services_list[b_id] = list
+            temp_list.append(services[b_id]['service_id'].iloc[i])
+        services_list[b_id] = temp_list
 
     return {"booking": booking, "services": services, "services_list": services_list}
 

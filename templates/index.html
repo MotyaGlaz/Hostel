@@ -14,32 +14,33 @@
         </header>
 
         <div class="content">
-            <div class="mainIndexContainer">
+            <div class="mainContainer">
                 <div class="settingsContainer">
                     <form action='' method="get">
                         <div class="calenderContainer">
                             <div class="calenderContent">
                                 <b>Дата заезда:</b>
                                 <label>
-                                    <input id="date_check_in" class="calender" type="date" name="date_check_in" required
-                                           value="{{ check_in }}" min="{{ current_day }}">
+                                    <input id="date_check_in" class="calender" type="date" name="date_check_in"
+                                           required value="{{ check_in }}" min="{{ current_day }}">
                                 </label>
                             </div>
                             <div class="calenderContent">
                                 <b>Дата выезда:</b>
                                 <label>
-                                    <input id="date_check_out" class="calender" type="date" name="date_check_out" required
-                                           value="{{ check_out }}" min="{{ min_date }}">
+                                    <input id="date_check_out" class="calender" type="date" name="date_check_out"
+                                           required value="{{ check_out }}" min="{{ min_date }}">
                                 </label>
                             </div>
                         </div>
 
                         <div class="checkboxContainer">
-                            {{ macros.render_check_box(df_type_room, room_type_list, 'select_types', 'Тип комнаты', len, str) }}
+                            {{ macros.render_check_box(df_type_room, room_type_list, 'select_types',
+                            'Тип комнаты', len, str) }}
                         </div>
                         <div class="checkboxContainer">
-                            {{ macros.render_check_box(df_description_room, room_description_list, 'select_descriptions',
-                            'Вид из окна', len, str) }}
+                            {{ macros.render_check_box(df_description_room, room_description_list,
+                            'select_descriptions', 'Вид из окна', len, str) }}
                         </div>
                         <div class="buttonFindContainer">
                             <input type="submit" value="Отправить" name="find_room" class="buttonFind">
@@ -50,7 +51,8 @@
                 <div class="availableRoom">
                     {{ macros.render_available_type(df_available_type, len)}}
                 </div>
-                {{ macros.render_modal_window(df_available_type, df_service, df_client, service_list, 'select_service', client_id, len, str) }}
+                {{ macros.render_modal_window(df_available_type, df_service, df_client, service_list,
+                'select_service', client_id, len, str) }}
             </div>
         </div>
     </div>

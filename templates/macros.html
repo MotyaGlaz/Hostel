@@ -2,20 +2,37 @@
 {% macro render_check_box(combo_box, id_list, name_box, name, len, str) %}
     <div class="checkboxContent">
         <span class="nameCheckbox">{{ name }}</span>
-        {% for i in range(len(combo_box)) %}
-            <p class="checkboxLabel">
-                <label>
-                    <input type="checkbox" name="{{ name_box }}"
-                            {% set id_box = combo_box.iloc[i, 0] %}
-                           value={{ id_box }}
-                                   {% if str(id_box) in id_list %}
-                                       checked
-                                   {% endif %}
-                    >
-                    {{ combo_box.iloc[i, 1] }}
-                </label>
-            </p>
-        {% endfor %}
+        {% if name_box == 'status_room' %}
+            {% for i in range(len(combo_box)) %}
+                <p class="checkboxLabel">
+                    <label>
+                        <input type="checkbox" name="{{ name_box }}"
+                                {% set id_box = combo_box[i] %}
+                                value='{{ id_box }}'
+                                       {% if str(id_box) in id_list %}
+                                           checked
+                                       {% endif %}
+                        >
+                        {{ combo_box[i] }}
+                    </label>
+                </p>
+            {% endfor %}
+        {% else %}
+            {% for i in range(len(combo_box)) %}
+                <p class="checkboxLabel">
+                    <label>
+                        <input type="checkbox" name="{{ name_box }}"
+                                {% set id_box = combo_box.iloc[i, 0] %}
+                                value={{ id_box }}
+                                       {% if str(id_box) in id_list %}
+                                           checked
+                                       {% endif %}
+                        >
+                        {{ combo_box.iloc[i, 1] }}
+                    </label>
+                </p>
+            {% endfor %}
+        {% endif %}
     </div>
 {% endmacro %}
 
@@ -171,7 +188,7 @@
                 </li>
                 <li>
                     <form action="{{ url_for('index') }}" method="get">
-{#                        <input type="submit" name="exit" value="Выйти" class="buttonClient">#}
+                        <input type="submit" name="exit" value="Выйти" class="buttonClient">
                         <label>
                             <input hidden type="text" name="client" value=''>
                         </label>
@@ -194,9 +211,9 @@
                             <p>
                                 <b>{{ attribute[1] }}:</b> <label {% if df_booking.loc[i, attribute[0]]
                                     == 'Оконченное бронирование' %}
-                                        style="color: #969696"
+                                        style="color: #989898"
                                     {% elif df_booking.loc[i, attribute[0]] == 'Предстоящее бронирование' %}
-                                        style="color: #e7df43"
+                                        style="color: #ceb300"
                                     {% elif df_booking.loc[i, attribute[0]] == 'Активное бронирование' %}
                                         style="color: #76c94c"
                                     {% else %}

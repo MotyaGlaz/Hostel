@@ -10,10 +10,32 @@
         <header id="header" class="header lock-padding">
             {{ macros.render_booking_header(df_client, client_id, len, int) }}
         </header>
+
         <div class="content">
             <div class="mainContainer">
-                {{ macros.render_booking_client(df_booking, len) }}
-                {{ macros.render_modal_window_booking(df_booking, df_booking_services, df_service, service_list, len, str, int) }}
+                <div class="settingsContainer">
+                    <form action="" method="get">
+                        <div class="checkboxContainer">
+                            {{ macros.render_check_box(df_status_room, status_room_list, 'status_room',
+                            'Статус бронирования', len, str) }}
+                        </div>
+                        <div class="checkboxContainer">
+                            {{ macros.render_check_box(df_type, type_room_list, 'type_room', 'Тип комнаты', len, str) }}
+                        </div>
+                        <div class="checkboxContainer">
+                            {{ macros.render_check_box(df_description, description_room_list, 'description_room',
+                            'Вид из окна', len, str) }}
+                        </div>
+                        <div class="buttonSortingContainer">
+                            <input type="submit" value="Сортировать" name="sorting" class="buttonSorting">
+                        </div>
+                    </form>
+                </div>
+
+                <div class="bookingContainer">
+                    {{ macros.render_booking_client(df_booking, len) }}
+                    {{ macros.render_modal_window_booking(df_booking, df_booking_services, df_service, service_list, len, str, int) }}
+                </div>
             </div>
         </div>
     </body>
@@ -29,10 +51,10 @@
         }
         for(let i=0; i < n; i++){
             let full_price = modal_windows[i].querySelector(`#full_price_${i}`);
-            for(var j=0; j < 7; j++){
+            for(j=0; j < 7; j++){
                 services[i].push(modal_windows[i].querySelector(`#service_${i}_${j}`));
             }
-            for(var j=0; j<7; j++){
+            for(j=0; j<7; j++){
                 if (services[i][j].checked){
                     full_price.textContent = Number(full_price.textContent) + price_service[j+1]
                 }
