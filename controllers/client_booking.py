@@ -5,7 +5,6 @@ from models.client_booking_model import get_booking_client, delete_booking, chan
     get_type_room, get_description_room
 from models.index_model import get_client, get_service
 from datetime import date
-from dateutil.relativedelta import relativedelta
 
 
 @app.route('/client_booking', methods=['get', 'post'])
@@ -23,7 +22,7 @@ def client_booking():
     type_room = []
     description_room = []
 
-
+    # переход с главной странице (по кнопке, пользователь —> личный кабинет)
     if request.values.get('client'):
         session['client_id'] = int(request.values.get('client'))
         client_id = session['client_id']
@@ -52,7 +51,7 @@ def client_booking():
         booking_id = request.values.get('booking_id')
         delete_booking(conn, booking_id)
 
-    # изменение списка услуг
+    # изменение списка услуг для карточки с бронью
     elif request.values.get('change_service'):
         status_room = session['status_room']
         type_room = session['type_room']
@@ -79,6 +78,7 @@ def client_booking():
         'client_booking.html',
         current_day=current_day,
 
+        # наборы данных
         df_type=df_type,
         df_description=df_description,
         list_status_room=rooms_status,
@@ -88,12 +88,14 @@ def client_booking():
         df_booking_services=df_booking_services,
         df_status_room=rooms_status,
 
+        # ID и списки с ID
         client_id=client_id,
         service_list=service_list,
         type_room_list=type_room,
         status_room_list=status_room,
         description_room_list=description_room,
 
+        # Необходимые функции для макросов
         len=len,
         str=str,
         int=int

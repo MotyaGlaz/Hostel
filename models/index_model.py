@@ -1,6 +1,9 @@
 import pandas as pd
 
 
+# Получение типов номеров
+# Вход: соединение с БД
+# Выход: data frame (DF)
 def get_type_room(conn):
     return pd.read_sql('''
         SELECT
@@ -10,10 +13,12 @@ def get_type_room(conn):
         FROM room
             INNER JOIN room_type USING (type_id)
         GROUP BY type_id
-        -- ORDER BY type_name
     ''', conn)
 
 
+# Получение описаний номеров
+# Вход: соединение с БД
+# Выход: DF
 def get_description_room(conn):
     return pd.read_sql('''
         SELECT
@@ -27,6 +32,9 @@ def get_description_room(conn):
     ''', conn)
 
 
+# Получение сервисов (услуг)
+# Вход: соединение с БД
+# Выход: data frame (DF)
 def get_service(conn):
     return pd.read_sql('''
         SELECT
@@ -38,6 +46,9 @@ def get_service(conn):
     ''', conn)
 
 
+# Получение информации о клиентах
+# Вход: соединение с БД
+# Выход: data frame (DF)
 def get_client(conn):
     return pd.read_sql('''
         SELECT 
@@ -50,6 +61,9 @@ def get_client(conn):
     ''', conn)
 
 
+# Аутентификация пользователя
+# Вход: соединение с БД, телефон, пароль
+# Выход: ID пользователя, при успешной аутентификации
 def login(conn, phone, password):
     if phone == '' or password == '':
         user_id = -1
@@ -67,7 +81,10 @@ def login(conn, phone, password):
 
     return user_id
 
-# Получение свободных номеров по типу и описанию
+
+# Получение свободных номеров по описанию и типу номера
+# Вход: соединение с БД, даты заезда и выезда, типы комнат, описания для комнат
+# Выход: DF
 def get_available_type(conn, check_in, check_out, rooms_type, rooms_description):
     return pd.read_sql(f'''
         SELECT 
@@ -97,7 +114,9 @@ def get_available_type(conn, check_in, check_out, rooms_type, rooms_description)
    ''', conn, params={"c_in": check_in, "c_out": check_out})
 
 
-# Создание бронирования на основе предпочтений данных пользователя
+# Создание бронирования на основе предпочтений, данных пользователя
+# Вход: соединение с БД, даты бронирования, ID (типа, описания, клиента), список услуг
+# Выход: нет
 def make_booking(conn, check_in, check_out, type_id, description_id, client_id, service_list):
     # получение самого первого подходящего номера
     get_room_id = int(pd.read_sql('''

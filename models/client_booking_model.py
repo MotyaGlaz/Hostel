@@ -1,5 +1,9 @@
 import pandas as pd
 
+
+# Получение типов комнат
+# Вход: соединение с БД
+# Выход: data frame (DF)
 def get_type_room(conn):
     return pd.read_sql('''
         SELECT
@@ -9,6 +13,9 @@ def get_type_room(conn):
     ''',conn)
 
 
+# Получение видов из окна (описаний)
+# Вход: соединение с БД
+# Выход: DF
 def get_description_room(conn):
     return pd.read_sql('''
         SELECT
@@ -18,6 +25,9 @@ def get_description_room(conn):
     ''', conn)
 
 
+# Получение бронирований пользователя
+# Вход: соединение с БД, ID клиента, текущая дата, массивы с выборами (типы, статусы и описания комнат)
+# Выход: словарь, состоит из DF с бронированиями, два списка с сервисами
 def get_booking_client(conn, client_id, current_day, status_list, type_list, description_list):
     booking = pd.read_sql(f'''
         SELECT
@@ -73,6 +83,9 @@ def get_booking_client(conn, client_id, current_day, status_list, type_list, des
     return {"booking": booking, "services": services, "services_list": services_list}
 
 
+# Удаление бронирования
+# Вход: соединение с БД, ID брони
+# Выход: нет
 def delete_booking(conn, booking_id):
     cur = conn.cursor()
 
@@ -85,6 +98,9 @@ def delete_booking(conn, booking_id):
     conn.commit()
 
 
+# Изменение списка услуг для конкретного бронирования
+# Вход: соединение с БД, ID брони, список изменённых услуг
+# Выход: нет
 def change_service(conn, booking_id, service_list):
 
     df_service_booking = pd.read_sql('''

@@ -7,42 +7,47 @@
         {% import "macros.html" as macros %}
     </head>
     <body>
-        <header id="header" class="header lock-padding">
+        {# Хедер #}
+        <header id="header" class="header lock_padding">
             {{ macros.render_booking_header(df_client, client_id, len, int) }}
         </header>
 
+        {# Основное контейнер #}
         <div class="content">
-            <div class="mainContainer">
-                <div class="settingsContainer">
+            <div class="main_container">
+                {# Контейнер настроек #}
+                <div class="settings_container">
                     <form action="" method="get">
-                        <div class="checkboxContainer">
+                        <div class="checkbox_container">
                             {{ macros.render_check_box(df_status_room, status_room_list, 'status_room',
                             'Статус бронирования', len, str) }}
                         </div>
-                        <div class="checkboxContainer">
+                        <div class="checkbox_container">
                             {{ macros.render_check_box(df_type, type_room_list, 'type_room', 'Тип комнаты', len, str) }}
                         </div>
-                        <div class="checkboxContainer">
+                        <div class="checkbox_container">
                             {{ macros.render_check_box(df_description, description_room_list, 'description_room',
                             'Вид из окна', len, str) }}
                         </div>
-                        <div class="buttonSortingContainer">
-                            <input type="submit" value="Сортировать" name="sorting" class="buttonSorting">
+                        <div class="button_container">
+                            <input type="submit" value="Сортировать" name="sorting" class="button_sorting">
                         </div>
                     </form>
                 </div>
 
-                <div class="bookingContainer">
+                {# Контейнер с карточками для бронирований и модальными окнами для карточек #}
+                <div class="booking_container">
                     {{ macros.render_booking_client(df_booking, len) }}
-                    {{ macros.render_modal_window_booking(df_booking, df_booking_services, df_service, service_list, len, str, int) }}
                 </div>
+                {{ macros.render_modal_window_booking(df_booking, df_booking_services,
+                    df_service, service_list, len, str, int) }}
             </div>
         </div>
     </body>
 
     <script>
         // работа с изменением цены
-        modal_windows = document.querySelectorAll('.modalWindow');
+        modal_windows = document.querySelectorAll('.modal_window');
         let n = modal_windows.length;
         let services = [];
         let price_service = {1:205, 2:350, 3:400, 4:580, 5:750, 6:650, 7:100}

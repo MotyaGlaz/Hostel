@@ -9,23 +9,27 @@
 <body>
     <div class="wrapper">
 
-        <header id="header" class="header lock-padding">
+        {# Хедер #}
+        <header id="header" class="header lock_padding">
             {{ macros.render_index_header(df_client, client_id, error_login, len, int) }}
         </header>
 
+        {# Основной контейнер #}
         <div class="content">
-            <div class="mainContainer">
-                <div class="settingsContainer">
+            <div class="main_container">
+
+                {# Контейнер с настройками #}
+                <div class="settings_container">
                     <form action='' method="get">
-                        <div class="calenderContainer">
-                            <div class="calenderContent">
+                        <div class="calender_container">
+                            <div class="calender_content">
                                 <b>Дата заезда:</b>
                                 <label>
                                     <input id="date_check_in" class="calender" type="date" name="date_check_in"
                                            required value="{{ check_in }}" min="{{ current_day }}">
                                 </label>
                             </div>
-                            <div class="calenderContent">
+                            <div class="calender_content">
                                 <b>Дата выезда:</b>
                                 <label>
                                     <input id="date_check_out" class="calender" type="date" name="date_check_out"
@@ -34,25 +38,26 @@
                             </div>
                         </div>
 
-                        <div class="checkboxContainer">
+                        <div class="checkbox_container">
                             {{ macros.render_check_box(df_type_room, room_type_list, 'select_types',
                             'Тип комнаты', len, str) }}
                         </div>
-                        <div class="checkboxContainer">
+                        <div class="checkbox_container">
                             {{ macros.render_check_box(df_description_room, room_description_list,
                             'select_descriptions', 'Вид из окна', len, str) }}
                         </div>
-                        <div class="buttonFindContainer">
-                            <input type="submit" value="Отправить" name="find_room" class="buttonFind">
+                        <div class="button_container">
+                            <input type="submit" value="Отправить" name="find_room" class="button_find">
                         </div>
                     </form>
                 </div>
 
-                <div class="availableRoom">
+                {# Контейнер с карточками для бронирований и модальными окнами для карточек #}
+                <div class="available_room">
                     {{ macros.render_available_type(df_available_type, len)}}
                 </div>
                 {{ macros.render_modal_window(df_available_type, df_service, df_client, service_list,
-                'select_service', client_id, len, str) }}
+                    'select_service', client_id, len, str) }}
             </div>
         </div>
     </div>
@@ -69,7 +74,7 @@
     })
 
     // работа с изменением цены
-    modal_windows = document.querySelectorAll('.modalWindow');
+    modal_windows = document.querySelectorAll('.modal_window');
     let n = modal_windows.length;
     let services = [];
     let price_service = {1:205, 2:350, 3:400, 4:580, 5:750, 6:650, 7:100}
@@ -95,7 +100,7 @@
         }
     }
 
-    //
+    // Вывод ошибки при не правильном логине или пароле
     phone = document.querySelector('#phone')
     if (phone.value === 'Ошибка'){
         window.onload = function (){

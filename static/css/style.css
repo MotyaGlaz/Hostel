@@ -6,6 +6,7 @@ body.lock{
     overflow: hidden;
 }
 
+/* блок с дизайном хедера */
 nav ul {
   list-style: none;
   margin: 0;
@@ -29,23 +30,23 @@ nav a {
     border: 2px solid #dadaf6;
 }
 
-.headerContent{
+.header_content{
     display: flex;
     flex-direction: row-reverse;
     margin: 0 10px;
 }
 
-.topMenu{
+.top_menu{
     backface-visibility: hidden;
     background: rgba(255,255,255,.8);
 }
 
-.topMenu > li{
+.top_menu > li{
     display: inline-block;
     position: relative;
 }
 
-.topMenu > li > a{
+.top_menu > li > a{
     font-family: 'Exo 2', sans-serif;
     padding: 0 30px;
     font-weight: bold;
@@ -53,43 +54,123 @@ nav a {
     text-transform: uppercase;
 }
 
-.downSubMenu:after{
+.down_sub_menu:after{
     content: "\f107";
     margin-left: 8px;
     font-family: FontAwesome, serif;
 }
 
-.topMenu li a{
+.top_menu li a{
     color: #2e30d0;
 }
 
-.subMenu{
+.sub_menu{
+    padding: 0 10px;
     background: white;
-    border: 2px solid #003559;
+    border: 2px solid #dadaf6;
+    border-radius: 5px;;
     position: absolute;
-    left: 0;
+    left: 25px;
     visibility: hidden;
     opacity: 0;
     z-index: 5;
-    width: 150px;
+    width: auto;
     transform: perspective(600px) rotateX(-90deg);
     transform-origin: 0 0;
     transition: .6s ease-in-out;
+    list-style-type: none;
 }
 
-.topMenu >li:hover .subMenu{
+.top_menu >li:hover .sub_menu{
     visibility: visible;
     opacity: 3;
     transform: perspective(500px) rotateX(0deg);
 }
 
-.subMenu li a{
+.sub_menu li a{
     color: #7f7f7f;
     font-size: 13px;
     line-height: 36px;
 }
 
-.buttonClient{
+/* Оформления основных контейнеров */
+/* Главные контейнеры */
+.wrapper{
+    overflow: hidden;
+    min-height: 100%;
+}
+
+.main_container{
+    padding: 0 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.content{
+    padding: 100px 0 0 0;
+}
+
+/* Контейнер для карточек с бронированием */
+.booking_container{
+    margin: 0 auto;
+    padding: 0 15px;
+    max-width: 1070px;
+
+}
+
+/* Контейнер для настроек */
+.settings_container{
+    border: 2px solid #c6c6ef;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.calender_container{
+    display: flex;
+    flex-direction: column;
+}
+
+.calender_content{
+    margin: 5px 0;
+}
+
+.checkbox_container{
+    margin: 2px 0;
+}
+
+.checkbox_content{
+    border: 1px solid #e6e6ff;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+}
+
+.name_checkbox{
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+.checkbox_label{
+    margin: 3% 0;
+    width: max-content;
+}
+
+/* блок с дизайном кнопок */
+.button_container{
+    display: flex;
+    justify-content: center;
+    margin: 5% 0 0 0;
+}
+
+.button_menu_container{
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.button_client{
     background-color: #dadaf6;
     border: 1px solid #c6c6ef;
     color: #6d6d72;
@@ -102,73 +183,7 @@ nav a {
     margin: 2px 0;
 }
 
-.wrapper{
-    overflow: hidden;
-    min-height: 100%;
-}
-
-.content{
-    padding: 100px 0 0 0;
-}
-
-.bookingContainer{
-    margin: 0 auto;
-    padding: 0 15px;
-    max-width: 1070px;
-
-}
-.mainContainer{
-    padding: 0 15px;
-    /*max-width: 1070px;*/
-    display: flex;
-    justify-content: center;
-}
-
-.settingsContainer{
-    border: 2px solid #c6c6ef;
-    border-radius: 5px;
-    padding: 10px;
-}
-
-.calenderContainer{
-    display: flex;
-    flex-direction: column;
-}
-
-.calenderContent{
-    margin: 5px 0;
-}
-
-.checkboxContainer{
-    margin: 2px 0;
-}
-
-.checkboxContent{
-    border: 1px solid #e6e6ff;
-    border-radius: 7px;
-    display: flex;
-    flex-direction: column;
-}
-
-.nameCheckbox{
-    display: flex;
-    justify-content: center;
-    font-size: 20px;
-    font-weight: bolder;
-}
-
-.checkboxLabel{
-    margin: 3% 0;
-    width: max-content;
-}
-
-.buttonFindContainer, .buttonSortingContainer{
-    display: flex;
-    justify-content: center;
-    margin: 5% 0 0 0;
-}
-
-.buttonFind, .buttonSorting{
+.button_find, .button_sorting, .button_booking, .button_setting{
     background-color: #dadaf6;
     border: 2px solid #c6c6ef;
     color: #6d6d72;
@@ -178,16 +193,19 @@ nav a {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    margin: 0 20px;
 }
 
-.availableRoom{
+/* Дизайн каточек бронирований */
+.available_room{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
 }
 
-.modalWindow{
+/* Дизайн модальных окон для карточек */
+.modal_window{
     position: fixed;
     width: 100%;
     height: 100%;
@@ -200,18 +218,18 @@ nav a {
     overflow-x: hidden;
 
 }
-.modalWindow:target{
+.modal_window:target{
     opacity: 1;
     visibility: visible;
 }
-.windowArea{
+.window_area{
     position: absolute;
     width: 100%;
     height: 100%;
     right: 0;
     top: 0;
 }
-.windowBody{
+.window_body{
     min-height: 100%;
     max-height: 100%;
     display: flex;
@@ -219,7 +237,7 @@ nav a {
     justify-content: center;
     padding: 30px 10px;
 }
-.windowContent{
+.window_content{
     background-color: #fff;
     color: #000;
     max-width: 800px;
@@ -228,7 +246,7 @@ nav a {
     border: 1px solid #c6c6ef;
     border-radius: 10px;
 }
-.windowClose{
+.window_close{
     position: absolute;
     right: 10px;
     top: 10px;
@@ -236,18 +254,15 @@ nav a {
     color: #000;
     text-decoration: none;
 }
-.windowClose:hover{
+.window_close:hover{
     background: #e6e6ff;
 }
-.windowTitle{
+.window_title{
     font-size: 40px;
     margin: 0 0 1em 0;
 }
-.windowText{
 
-}
-
-.toModalWindow{
+.to_modal_window{
     margin: 15px;
     border: 2px solid #e6e6ff;
     border-radius: 6px;
@@ -255,11 +270,11 @@ nav a {
     padding: 0 20px;
 }
 
-.toModalWindow:hover{
+.to_modal_window:hover{
     background-color: #e6e6ff;
 }
 
-.bookingClient{
+.booking_client{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

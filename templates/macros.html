@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+
+{# Отрисовка маркеров #}
 {% macro render_check_box(combo_box, id_list, name_box, name, len, str) %}
-    <div class="checkboxContent">
-        <span class="nameCheckbox">{{ name }}</span>
+    <div class="checkbox_content">
+        <span class="name_checkbox">{{ name }}</span>
         {% if name_box == 'status_room' %}
             {% for i in range(len(combo_box)) %}
-                <p class="checkboxLabel">
+                <p class="checkbox_label">
                     <label>
                         <input type="checkbox" name="{{ name_box }}"
                                 {% set id_box = combo_box[i] %}
@@ -19,7 +21,7 @@
             {% endfor %}
         {% else %}
             {% for i in range(len(combo_box)) %}
-                <p class="checkboxLabel">
+                <p class="checkbox_label">
                     <label>
                         <input type="checkbox" name="{{ name_box }}"
                                 {% set id_box = combo_box.iloc[i, 0] %}
@@ -36,15 +38,16 @@
     </div>
 {% endmacro %}
 
+{# Отрисовка карточек (модальных окон) для потенциальных карточек бронирований #}
 {% macro render_available_type(combo_box, len) %}
     {% set attributes = {'description': 'Описание', 'type_name': 'Тип', 'price': 'Цена за сутки'} %}
     {% for i in range(len(combo_box)) %}
-        <div class="toModalWindow">
-            <a href="#modalWindow_{{ i }}" style="text-decoration: none; color: #000;" >
-                <div class="descriptionWrapper">
+        <div class="to_modal_window">
+            <a href="#modal_window_{{ i }}" style="text-decoration: none; color: #000;" >
+                <div class="description_wrapper">
                     {% for attribute in attributes.items() %}
-                        <p class="descriptionContent">
-                            <b class="descriptionName">{{ attribute[1] }}:</b> <label class="description">
+                        <p class="description_content">
+                            <b class="description_name">{{ attribute[1] }}:</b> <label class="description">
                                 {{ combo_box.loc[i, attribute[0]] }}</label>
                         </p>
                     {% endfor %}
@@ -54,16 +57,17 @@
     {% endfor %}
 {% endmacro %}
 
+{# Отрисовка модального окна для карточки бронирования (детальная) #}
 {% macro render_modal_window(combo_box_1, combo_box_2, combo_box_3, id_list, name_box, client_id, len, str) %}
     {% set attributes = {'type_name': 'Тип', 'detailed_description': 'Описание'} %}
     {% for i in range(len(combo_box_1)) %}
-        <div id="modalWindow_{{ i }}" class="modalWindow">
-            <a href="#header" class="windowArea"></a>
-            <div class="windowBody">
-                <div class="windowContent">
-                    <div class="windowTitle">Бронирование номера</div>
+        <div id="modal_window_{{ i }}" class="modal_window">
+            <a href="#header" class="window_area"></a>
+            <div class="window_body">
+                <div class="window_content">
+                    <div class="window_title">Бронирование номера</div>
                     <form action='' method="get">
-                        <div class="windowText">
+                        <div class="window_text">
                             {% for attribute in attributes.items() %}
                                 <p>
                                     <b>{{ attribute[1] }}:</b> {{ combo_box_1.loc[i, attribute[0]] }}
@@ -77,7 +81,7 @@
                                 <input name="description_id" value="{{ combo_box_1.loc[i, 'description_id'] }}">
                             </label>
                         </div>
-                        <div class="windowCheckBox">
+                        <div class="window_check_box">
                             {% for j in range(len(combo_box_2)) %}
                                 <p>
                                     <label>
@@ -94,65 +98,56 @@
                             {% endfor %}
                         </div>
                         {% if client_id != "" %}
-                            <input type="submit" name="make_booking" value="Бронируем"
-                                   onclick="alert('Вы успешно забронировали номер')">
+                            <div class="button_container">
+                                <input type="submit" name="make_booking" value="Бронируем" class="button_booking"
+                                       onclick="alert('Вы успешно забронировали номер')">
+                            </div>
                         {% else %}
                             <b style="color: red">Пожалуйста пройдите аутентификацию</b>
-{#                            <label>#}
-{#                                <select name="client_id">#}
-{#                                     {% for j in range(len(combo_box_3)) %}#}
-{#                                         {% set c_id = combo_box_3.loc[j, "client_id"] %}#}
-{#                                         {% if c_id == client_id %}#}
-{#                                             <option selected value={{ c_id }}>#}
-{#                                                 {% else %}#}
-{#                                             <option value={{ c_id }}>#}
-{#                                         {% endif %}#}
-{#                                         {{ combo_box_3.loc[j, "client_name"] }}#}
-{#                                         </option>#}
-{#                                     {% endfor %}#}
-{#                                </select>#}
-{#                            </label>#}
-{#                            <input type="submit" name="make_booking" value="Аутентификация и бронирование"#}
-{#                                   onclick="alert('Вы успешно забронировали номер')">#}
                         {% endif %}
                     </form>
-                    <a href="#header" class="windowClose">X</a>
+                    <a href="#header" class="window_close">X</a>
                 </div>
             </div>
         </div>
     {% endfor %}
 {% endmacro %}
 
+{# Отрисовка хедера для странице index #}
 {% macro render_index_header(combo_box, id_elem, error,len, int)%}
-    <div class="headerContent">
+    <div class="header_content">
         {% if id_elem != '' %}
-            <ul class="topMenu">
-                <li><a href="" class="downSubMenu">{{ combo_box.iloc[int(id_elem) - 1]["client_name"] }}</a>
-                    <ul class="subMenu">
+            <ul class="top_menu">
+                <li><a href="" class="down_sub_menu">{{ combo_box.iloc[int(id_elem) - 1]["client_name"] }}</a>
+                    <ul class="sub_menu">
                         <li>
-                            <form action="{{ url_for('client_booking') }}" method="get">
-                                <input type="submit" value="Мои бронирования" class="buttonClient">
-                                <label>
-                                    <input hidden type="text" name="client" value="{{ int(id_elem) }}">
-                                </label>
-                            </form>
+                            <div class="button_menu_container">
+                                <form action="{{ url_for('client_booking') }}" method="get">
+                                    <input type="submit" value="Мои бронирования" class="button_client">
+                                    <label>
+                                        <input hidden type="text" name="client" value="{{ int(id_elem) }}">
+                                    </label>
+                                </form>
+                            </div>
                         </li>
                         <li>
-                            <form action="" method="get">
-                                <input type="submit" name="exit" value="Выйти" class="buttonClient">
-                            </form>
+                            <div div class="button_menu_container">
+                                <form action="" method="get">
+                                    <input type="submit" name="exit" value="Выйти" class="button_client">
+                                </form>
+                            </div>
                         </li>
                     </ul>
                 </li>
             </ul>
         {% else %}
-            <ul class="topMenu">
-                <li><a href="" class="downSubMenu">Аутентификация</a>
-                    <ul class="subMenu">
+            <ul class="top_menu">
+                <li><a href="" class="down_sub_menu">Аутентификация</a>
+                    <ul class="sub_menu">
                         <li>
                             <div class="authentication">
                                 <form action="" method="get">
-                                    <div class="inputTextContent">
+                                    <div class="input_text_content">
                                         <b>Введите номер телефона</b>
                                         <label>
                                             <input type="text" name="phone" id="phone"
@@ -164,7 +159,7 @@
                                             >
                                         </label>
                                     </div>
-                                    <div class="inputTextContent">
+                                    <div class="input_text_content">
                                         <b>Введите пароль</b>
                                         <label>
                                             <input type="text" name="password"
@@ -176,7 +171,7 @@
                                             >
                                         </label>
                                     </div>
-                                    <input type="submit" name="authorization" value="Войти" class="buttonClient">
+                                    <input type="submit" name="authorization" value="Войти" class="button_client">
                                 </form>
                             </div>
                         </li>
@@ -187,13 +182,14 @@
     </div>
 {% endmacro %}
 
+{# Отрисовка хедера для личного кабинета пользователя #}
 {% macro render_booking_header(df_client, client_id, len, int) %}
-    <ul class="topMenu">
-        <li><a href="" class="downSubMenu">{{ df_client.iloc[int(client_id) - 1]["client_name"] }}</a>
-            <ul class="subMenu">
+    <ul class="top_menu">
+        <li><a href="" class="down_sub_menu">{{ df_client.iloc[int(client_id) - 1]["client_name"] }}</a>
+            <ul class="sub_menu">
                 <li>
                     <form action="{{ url_for('index') }}" method="get">
-                        <input type="submit" value="Забронировать ещё" class="buttonClient">
+                        <input type="submit" value="Забронировать ещё" class="button_client">
                         <label>
                             <input hidden type="text" name="client" value="{{ int(client_id) }}">
                         </label>
@@ -201,7 +197,7 @@
                 </li>
                 <li>
                     <form action="{{ url_for('index') }}" method="get">
-                        <input type="submit" name="exit" value="Выйти" class="buttonClient">
+                        <input type="submit" name="exit" value="Выйти" class="button_client">
                         <label>
                             <input hidden type="text" name="client" value=''>
                         </label>
@@ -212,13 +208,14 @@
     </ul>
 {% endmacro %}
 
+{# Отрисовка карточек бронирований пользователя #}
 {% macro render_booking_client(df_booking, len) %}
-    <div class="bookingClient">
+    <div class="booking_client">
         {% set attributes = {'status': 'Статус', 'room_id': 'Комната', 'description': 'Описание',
             'type_name': 'Тип', 'price_booking': 'Цена за сутки'} %}
         {% for i in range(len(df_booking)) %}
-            <div class="toModalWindow">
-                <a href="#modalWindow_{{ i }}" style="text-decoration: none; color: #000;" >
+            <div class="to_modal_window">
+                <a href="#modal_window_{{ i }}" style="text-decoration: none; color: #000;" >
                     {% for attribute in attributes.items() %}
                         {% if attribute[0] == 'status' %}
                             <p>
@@ -247,17 +244,18 @@
     </div>
 {% endmacro %}
 
+{# Отрисовка модальных окон для бронирований пользователя #}
 {% macro render_modal_window_booking(df_booking, df_booking_services, df_service, service_list, len, str, int) %}
 {% set attributes = {'type_name': 'Тип', 'detailed_description': 'Описание', 'status': 'Статус', 'room_id': 'Комната',
         'date_check_in': 'Дата заезд', 'date_check_out': 'Дата выезд'} %}
     {% for i in range(len(df_booking)) %}
-        <div id="modalWindow_{{ i }}" class="modalWindow">
-            <a href="#header" class="windowArea"></a>
-            <div class="windowBody">
-                <div class="windowContent">
-                    <div class="windowTitle">Информация о бронировании</div>
+        <div id="modal_window_{{ i }}" class="modal_window">
+            <a href="#header" class="window_area"></a>
+            <div class="window_body">
+                <div class="window_content">
+                    <div class="window_title">Информация о бронировании</div>
                     <form action='' method="get">
-                        <div class="windowText">
+                        <div class="window_text">
                             {% for attribute in attributes.items() %}
                                 {% if attribute[0] == 'status' %}
                                     <p>
@@ -306,19 +304,21 @@
                                 </p>
                             {% endfor %}
                         </div>
-
-                        <input type="submit" name="delete_booking" value="Отменить бронирование"
-                        {% if df_booking.loc[i, 'status'] != 'Предстоящее бронирование' %}
-                            disabled
-                        {% endif %}
-                        >
-                        <input type="submit" name="change_service" value="Изменить"
-                        {% if df_booking.loc[i, 'status'] != 'Предстоящее бронирование' %}
-                            disabled
-                        {% endif %}
-                        >
+                        <div class="button_container">
+                            <input type="submit" name="delete_booking" value="Отменить бронирование"
+                                   class="button_setting"
+                                    {% if df_booking.loc[i, 'status'] != 'Предстоящее бронирование' %}
+                                   disabled
+                                    {% endif %}
+                            >
+                            <input type="submit" name="change_service" value="Изменить" class="button_setting"
+                                    {% if df_booking.loc[i, 'status'] != 'Предстоящее бронирование' %}
+                                   disabled
+                                    {% endif %}
+                            >
+                        </div>
                     </form>
-                    <a href="#header" class="windowClose">X</a>
+                    <a href="#header" class="window_close">X</a>
                 </div>
             </div>
         </div>
