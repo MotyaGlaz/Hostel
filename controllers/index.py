@@ -2,7 +2,7 @@ from app import app
 from utils import get_db_connection, get_year, get_month, get_day
 from flask import render_template, request, session
 from models.index_model import get_type_room, get_description_room, get_available_type, get_service, get_client, \
-    make_booking
+    make_booking, login
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
@@ -17,8 +17,9 @@ def index():
     df_client = get_client(conn)
 
     current_day = date.today()
+    error_login = 0
 
-    # доделать проверку дат (при вводе начала менялся и конец на +1)
+    # поиска свободной комнаты
     if request.values.get('find_room'):
         session['date_check_in'] = request.values.get('date_check_in')
         session['date_check_out'] = request.values.get('date_check_out')
@@ -40,8 +41,15 @@ def index():
 
 
     elif request.values.get('authorization'):
-        session['client_id'] = int(request.values.get('select_client'))
+        phone = request.values.get('phone')
+        password = request.values.get('password')
+        client_id = int(login(conn, phone, password))
+        if client_id != -1:
+            session['client_id'] = client_id
+        else:
+            error_login = 1
         service_list = []
+
 
         date_check_in = session['date_check_in']
         date_check_out = session['date_check_out']
@@ -94,6 +102,7 @@ def index():
         description_id=session['description_id'],
         client_id= session['client_id'],
 
+        error_login=error_login,
         len=len,
         str=str,
         int=int

@@ -10,7 +10,7 @@
     <div class="wrapper">
 
         <header id="header" class="header lock-padding">
-            {{ macros.render_index_header(df_client, client_id, "select_client", len, int) }}
+            {{ macros.render_index_header(df_client, client_id, error_login, len, int) }}
         </header>
 
         <div class="content">
@@ -92,6 +92,14 @@
                     console.log(full_price.textContent)
                 }
             })
+        }
+    }
+
+    //
+    phone = document.querySelector('#phone')
+    if (phone.value === 'Ошибка'){
+        window.onload = function (){
+            alert('Ошибка при вводе логина или пароля')
         }
     }
 </script>

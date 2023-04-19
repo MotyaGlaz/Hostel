@@ -44,10 +44,28 @@ def get_client(conn):
             client_id,
             client_name,
             passport,
-            phone
+            phone,
+            password
         FROM client
     ''', conn)
 
+
+def login(conn, phone, password):
+    if phone == '' or password == '':
+        user_id = -1
+    else:
+        df_user_id = pd.read_sql('''
+            SELECT client_id
+            FROM client
+            WHERE phone = :ph AND password = :pas
+        ''', conn, params={"ph": phone, "pas": password})
+
+        if df_user_id.empty:
+            user_id = -1
+        else:
+            user_id = int(df_user_id['client_id'].iloc[0])
+
+    return user_id
 
 # Получение свободных номеров по типу и описанию
 def get_available_type(conn, check_in, check_out, rooms_type, rooms_description):

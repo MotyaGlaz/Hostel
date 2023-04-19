@@ -97,22 +97,23 @@
                             <input type="submit" name="make_booking" value="Бронируем"
                                    onclick="alert('Вы успешно забронировали номер')">
                         {% else %}
-                            <label>
-                                <select name="client_id">
-                                     {% for j in range(len(combo_box_3)) %}
-                                         {% set c_id = combo_box_3.loc[j, "client_id"] %}
-                                         {% if c_id == client_id %}
-                                             <option selected value={{ c_id }}>
-                                                 {% else %}
-                                             <option value={{ c_id }}>
-                                         {% endif %}
-                                         {{ combo_box_3.loc[j, "client_name"] }}
-                                         </option>
-                                     {% endfor %}
-                                </select>
-                            </label>
-                            <input type="submit" name="make_booking" value="Авторизация и бронирование"
-                                   onclick="alert('Вы успешно забронировали номер')">
+                            <b style="color: red">Пожалуйста пройдите аутентификацию</b>
+{#                            <label>#}
+{#                                <select name="client_id">#}
+{#                                     {% for j in range(len(combo_box_3)) %}#}
+{#                                         {% set c_id = combo_box_3.loc[j, "client_id"] %}#}
+{#                                         {% if c_id == client_id %}#}
+{#                                             <option selected value={{ c_id }}>#}
+{#                                                 {% else %}#}
+{#                                             <option value={{ c_id }}>#}
+{#                                         {% endif %}#}
+{#                                         {{ combo_box_3.loc[j, "client_name"] }}#}
+{#                                         </option>#}
+{#                                     {% endfor %}#}
+{#                                </select>#}
+{#                            </label>#}
+{#                            <input type="submit" name="make_booking" value="Аутентификация и бронирование"#}
+{#                                   onclick="alert('Вы успешно забронировали номер')">#}
                         {% endif %}
                     </form>
                     <a href="#header" class="windowClose">X</a>
@@ -122,7 +123,7 @@
     {% endfor %}
 {% endmacro %}
 
-{% macro render_index_header(combo_box, id_elem, name_box, len, int)%}
+{% macro render_index_header(combo_box, id_elem, error,len, int)%}
     <div class="headerContent">
         {% if id_elem != '' %}
             <ul class="topMenu">
@@ -146,26 +147,38 @@
             </ul>
         {% else %}
             <ul class="topMenu">
-                <li><a href="" class="downSubMenu">Авторизоваться</a>
+                <li><a href="" class="downSubMenu">Аутентификация</a>
                     <ul class="subMenu">
                         <li>
-                            <form action="" method="get">
-                                <label>
-                                    <select name="{{ name_box }}">
-                                        {% for i in range(len(combo_box))%}
-                                            {% set c_id = combo_box.loc[i, "client_id"] %}
-                                            {% if c_id == id_elem %}
-                                                <option selected value="{{ c_id }}">
-                                                    {% else %}
-                                                <option value="{{ c_id }}">
-                                            {% endif %}
-                                        {{ combo_box.loc[i, "client_name"] }}
-                                        </option>
-                                        {% endfor %}
-                                    </select>
-                                </label>
-                                <input type="submit" name="authorization" value="Войти" class="buttonClient">
-                            </form>
+                            <div class="authentication">
+                                <form action="" method="get">
+                                    <div class="inputTextContent">
+                                        <b>Введите номер телефона</b>
+                                        <label>
+                                            <input type="text" name="phone" id="phone"
+                                                {% if error == 1%}
+                                                    value="Ошибка"
+                                                {% else %}
+                                                    value=""
+                                                {% endif %}
+                                            >
+                                        </label>
+                                    </div>
+                                    <div class="inputTextContent">
+                                        <b>Введите пароль</b>
+                                        <label>
+                                            <input type="text" name="password"
+                                                {% if error == 1 %}
+                                                    value="Ошибка"
+                                                {% else %}
+                                                    value=""
+                                                {% endif %}
+                                            >
+                                        </label>
+                                    </div>
+                                    <input type="submit" name="authorization" value="Войти" class="buttonClient">
+                                </form>
+                            </div>
                         </li>
                     </ul>
                 </li>
